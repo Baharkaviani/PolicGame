@@ -1,11 +1,11 @@
 import java.util.concurrent.ThreadLocalRandom;
 
-public class theif {
+public class Theif {
     private int x,y;
     private int maxX, maxY;
     private int randomNum ;// = ThreadLocalRandom.current().nextInt(min, max + 1);
 
-    public theif(int x, int y, int maxX, int maxY){
+    public Theif(int x, int y, int maxX, int maxY){
         this.x = x;
         this.y = y;
         this.maxX = maxX;

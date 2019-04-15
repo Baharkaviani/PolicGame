@@ -1,8 +1,8 @@
-public class police {
+public class Police {
     private int x, y, lastX, lastY;
     private boolean thiefSeen;
 
-    public police(int x, int y){
+    public Police(int x, int y){
         this.x = x;
         this.y = y;
         lastX = -1;
