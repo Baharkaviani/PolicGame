@@ -1,20 +1,24 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Ground {
     private int policeNum;
     private int row, column;
     private Police[] polices;
+    private HashMap<Integer, Integer> coordinates;
     private int[][] ground;
     private Theif theif;
 
-    public Ground(int row, int column, int policeNum){
+    public Ground(int column, int row, int policeNum){
         this.policeNum = policeNum;
         this.row = row;
         this.column = column;
         polices = new Police[policeNum];
         ground = new int[row][column];
+        coordinates = new HashMap<>();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 ground[i][j] = -1;
@@ -23,23 +27,29 @@ public class Ground {
     }
 
     public void firstCoordinates(){
-        ArrayList<Integer> listX = new ArrayList<Integer>();
-        for (int i = 0; i < row; i++) {
-            listX.add(new Integer(i));
-        }
-        Collections.shuffle(listX);
         //coordinates for polices
+        System.out.println("column = " + column);
+        System.out.println("row = " + row);
         for (int i = 0; i < policeNum; i++) {
-            int x = listX.get(i);
-            int y = ThreadLocalRandom.current().nextInt(0, column + 1);
+            int x = ThreadLocalRandom.current().nextInt(0, column);
+            int y = ThreadLocalRandom.current().nextInt(0, row);
+            while (ground[y][x] == 1){
+                x = ThreadLocalRandom.current().nextInt(0, column);
+                y = ThreadLocalRandom.current().nextInt(0, row);
+            }
+            System.out.println("x = " + x);
             polices[i] = new Police(x, y);
-            ground[x][y] = 1;
+            ground[y][x] = 1;
         }
         //coordinates for theif
-        int x = listX.get(policeNum);
-        int y = ThreadLocalRandom.current().nextInt(0, column + 1);
-        theif = new Theif(x, y, row, column);
-        ground[x][y] = 0;
+        int x = ThreadLocalRandom.current().nextInt(0, column);
+        int y = ThreadLocalRandom.current().nextInt(0, row);
+        while (ground[y][x] == 1){
+            x = ThreadLocalRandom.current().nextInt(0, column);
+            y = ThreadLocalRandom.current().nextInt(0, row);
+        }
+        theif = new Theif(x, y, column, row);
+        ground[y][x] = 0;
 
         for (int i = 0; i < row; i++) {
             System.out.print("|");
