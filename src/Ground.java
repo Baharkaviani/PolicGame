@@ -9,11 +9,6 @@ public class Ground {
     private boolean thiefSeen;
     private boolean catchThief;
 
-    public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
     public Ground(int column, int row, int policeNum){
         this.policeNum = policeNum;
         this.row = row;
@@ -126,14 +121,28 @@ public class Ground {
             System.out.println();
         }
         System.out.println();
-        try
-        {
+        //waiting 2 seconds
+        try {
             Thread.sleep(2000);
         }
-        catch(InterruptedException ex)
-        {
+        catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-        clearScreen();
+        //clear console
+        try {
+            final String os = System.getProperty("os.name");
+
+            if (os.contains("Windows"))
+            {
+                Runtime.getRuntime().exec("cls");
+            }
+            else
+            {
+                Runtime.getRuntime().exec("clear");
+            }
+        }
+        catch (final Exception e) {
+            //  Handle any exceptions.
+        }
     }
 }
