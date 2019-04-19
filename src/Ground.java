@@ -8,6 +8,11 @@ public class Ground {
     private Theif theif;
     private boolean thiefSeen;
 
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
     public Ground(int column, int row, int policeNum){
         this.policeNum = policeNum;
         this.row = row;
@@ -60,6 +65,8 @@ public class Ground {
     public void coordinates(){
         if(thiefSeen == false) {
             for (int i = 0; i < policeNum; i++) {
+                polices[i].setLastX(polices[i].getX());
+                polices[i].setLastY(polices[i].getY());
                 polices[i].move();
             }
             theif.move();
@@ -75,6 +82,7 @@ public class Ground {
     }
 
     public void show(){
+        boolean catchThief = false;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 ground[i][j] = -1;
@@ -82,6 +90,11 @@ public class Ground {
         }
         for (int i = 0; i < policeNum; i++) {
             ground[polices[i].getY()][polices[i].getX()] = 1;
+            if ((polices[i].getLastX() == theif.getX()) && (polices[i].getLastY() == theif.getY())) {
+                catchThief = true;
+            }
+            if ((polices[i].getX() == theif.getX()) && (polices[i].getY() == theif.getY()))
+                catchThief = true;
         }
         ground[theif.getY()][theif.getX()] = 0;
 
@@ -89,13 +102,17 @@ public class Ground {
             System.out.print("|");
             for (int j = 0; j < column; j++) {
                 if(ground[i][j] == -1)
-                    System.out.print(" |");
-                else if(ground[i][j] == 0)
-                    System.out.print("*|");
-                else if(ground[i][j] == 1)
                     System.out.print("-|");
+                else if(ground[i][j] == 0)
+                    System.out.print("D|");
+                else if(ground[i][j] == 1)
+                    System.out.print("P|");
             }
             System.out.println();
         }
+        System.out.println();
+        clearScreen();
+        if(catchThief == true)
+            System.out.println("THE THIEF WAS CATCHED");
     }
 }
