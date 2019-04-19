@@ -4,14 +4,12 @@ public class Theif {
     private int x,y;
     private int maxX, maxY;
     private int randomNum ;// = ThreadLocalRandom.current().nextInt(min, max + 1);
-    private boolean thiefSeen;
 
     public Theif(int x, int y, int maxX, int maxY){
         this.x = x;
         this.y = y;
         this.maxX = maxX - 1;
         this.maxY = maxY - 1;
-        this.thiefSeen = false;
     }
 
     public void move(){
@@ -100,10 +98,6 @@ public class Theif {
 
     public int getY() {
         return y;
-    }
-
-    public boolean isThiefSeen() {
-        return thiefSeen;
     }
 
     //setter

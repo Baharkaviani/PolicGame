@@ -6,6 +6,7 @@ public class Ground {
     private Police[] polices;
     private int[][] ground;
     private Theif theif;
+    private boolean thiefSeen;
 
     public Ground(int column, int row, int policeNum){
         this.policeNum = policeNum;
@@ -16,6 +17,17 @@ public class Ground {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 ground[i][j] = -1;
+            }
+        }
+        thiefSeen = false;
+    }
+
+    public void thiefSeen(){
+        for (int i = 0; i < policeNum; i++) {
+            double distance = Math.pow((double)Math.abs(polices[i].getX() - theif.getX()), 2.0) + Math.pow((double) Math.abs(polices[i].getY() - theif.getY()), 2.0);
+            if(distance <= 8){
+                thiefSeen = true;
+                break;
             }
         }
     }
@@ -46,11 +58,20 @@ public class Ground {
     }
 
     public void coordinates(){
-        for (int i = 0; i < policeNum; i++) {
-            polices[i].move();
+        if(thiefSeen == false) {
+            for (int i = 0; i < policeNum; i++) {
+                polices[i].move();
+            }
+            theif.move();
+            show();
         }
-        theif.move();
-        show();
+        else {
+            for (int i = 0; i < policeNum; i++) {
+                //polices[i].logicMove();
+            }
+            theif.move();
+            show();
+        }
     }
 
     public void show(){
