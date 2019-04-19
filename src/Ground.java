@@ -7,6 +7,7 @@ public class Ground {
     private int[][] ground;
     private Theif theif;
     private boolean thiefSeen;
+    private boolean catchThief;
 
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");
@@ -24,10 +25,11 @@ public class Ground {
                 ground[i][j] = -1;
             }
         }
-        thiefSeen = false;
+        catchThief = false;
     }
 
-    public void thiefSeen(){
+    public boolean thiefSeen(){
+        thiefSeen = false;
         for (int i = 0; i < policeNum; i++) {
             double distance = Math.pow((double)Math.abs(polices[i].getX() - theif.getX()), 2.0) + Math.pow((double) Math.abs(polices[i].getY() - theif.getY()), 2.0);
             if(distance <= 8){
@@ -35,6 +37,7 @@ public class Ground {
                 break;
             }
         }
+        return thiefSeen;
     }
 
     public void firstCoordinates(){
@@ -63,6 +66,7 @@ public class Ground {
     }
 
     public void coordinates(){
+        thiefSeen();
         if(thiefSeen == false) {
             for (int i = 0; i < policeNum; i++) {
                 polices[i].setLastX(polices[i].getX());
@@ -74,15 +78,17 @@ public class Ground {
         }
         else {
             for (int i = 0; i < policeNum; i++) {
-                //polices[i].logicMove();
-            }
+                polices[i].setLastX(polices[i].getX());
+                polices[i].setLastY(polices[i].getY());
+                polices[i].logicMove(theif.getX(), theif.getY());            }
             theif.move();
             show();
         }
+        if(catchThief == false)
+            coordinates();
     }
 
     public void show(){
-        boolean catchThief = false;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 ground[i][j] = -1;

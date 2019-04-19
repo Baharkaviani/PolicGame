@@ -92,6 +92,31 @@ public class Police {
         }
     }
 
+    public void logicMove(int thiefX, int thiefY){
+        int changeX = x - thiefX;
+        int changeY = y - thiefY;
+        int rand = ThreadLocalRandom.current().nextInt(1, 3);
+        if (changeX > 0) {
+            x--;
+            if ((changeY > 0) && (rand == 1))
+                y--;
+            else if ((changeY < 0) && (rand == 1))
+                y++;
+        }
+        else if (changeX == 0){
+            if (changeY > 0)
+                y--;
+            else if (changeY < 0)
+                y++;
+        }
+        else {
+            x++;
+            if ((changeY > 0) && (rand == 1))
+                y--;
+            else if ((changeY < 0) && (rand == 1))
+                y++;
+        }
+    }
     //getter
     public int getLastX() {
         return lastX;
