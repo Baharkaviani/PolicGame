@@ -1,14 +1,9 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Ground {
     private int policeNum;
     private int row, column;
     private Police[] polices;
-    private HashMap<Integer, Integer> coordinates;
     private int[][] ground;
     private Theif theif;
 
@@ -18,7 +13,6 @@ public class Ground {
         this.column = column;
         polices = new Police[policeNum];
         ground = new int[row][column];
-        coordinates = new HashMap<>();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 ground[i][j] = -1;
@@ -28,8 +22,6 @@ public class Ground {
 
     public void firstCoordinates(){
         //coordinates for polices
-        System.out.println("column = " + column);
-        System.out.println("row = " + row);
         for (int i = 0; i < policeNum; i++) {
             int x = ThreadLocalRandom.current().nextInt(0, column);
             int y = ThreadLocalRandom.current().nextInt(0, row);
@@ -37,9 +29,8 @@ public class Ground {
                 x = ThreadLocalRandom.current().nextInt(0, column);
                 y = ThreadLocalRandom.current().nextInt(0, row);
             }
-            System.out.println("x = " + x);
-            polices[i] = new Police(x, y);
-            ground[y][x] = 1;
+            polices[i] = new Police(x, y, column, row);
+            ground[polices[i].getY()][polices[i].getX()] = 1;
         }
         //coordinates for theif
         int x = ThreadLocalRandom.current().nextInt(0, column);
@@ -49,7 +40,29 @@ public class Ground {
             y = ThreadLocalRandom.current().nextInt(0, row);
         }
         theif = new Theif(x, y, column, row);
-        ground[y][x] = 0;
+        ground[theif.getY()][theif.getX()] = 0;
+        show();
+        coordinates();
+    }
+
+    public void coordinates(){
+        for (int i = 0; i < policeNum; i++) {
+            polices[i].move();
+        }
+        theif.move();
+        show();
+    }
+
+    public void show(){
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                ground[i][j] = -1;
+            }
+        }
+        for (int i = 0; i < policeNum; i++) {
+            ground[polices[i].getY()][polices[i].getX()] = 1;
+        }
+        ground[theif.getY()][theif.getX()] = 0;
 
         for (int i = 0; i < row; i++) {
             System.out.print("|");
@@ -62,14 +75,6 @@ public class Ground {
                     System.out.print("-|");
             }
             System.out.println();
-        }
-    }
-//
-    public void show(){
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
-
-            }
         }
     }
 }
