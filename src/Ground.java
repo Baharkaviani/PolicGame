@@ -1,7 +1,7 @@
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Ground {
-    private int policeNum;
+    private int policeNum, policeMoves, thiefMoves;
     private int row, column;
     private Police[] polices;
     private int[][] ground;
@@ -28,7 +28,7 @@ public class Ground {
         catchThief = false;
     }
 
-    public boolean thiefSeen(){
+    public void thiefSeen(){
         thiefSeen = false;
         for (int i = 0; i < policeNum; i++) {
             double distance = Math.pow((double)Math.abs(polices[i].getX() - theif.getX()), 2.0) + Math.pow((double) Math.abs(polices[i].getY() - theif.getY()), 2.0);
@@ -37,7 +37,6 @@ public class Ground {
                 break;
             }
         }
-        return thiefSeen;
     }
 
     public void firstCoordinates(){
@@ -67,25 +66,35 @@ public class Ground {
 
     public void coordinates(){
         thiefSeen();
-        if(thiefSeen == false) {
+        if(!thiefSeen) {
             for (int i = 0; i < policeNum; i++) {
                 polices[i].setLastX(polices[i].getX());
                 polices[i].setLastY(polices[i].getY());
                 polices[i].move();
             }
             theif.move();
+            policeMoves += policeNum;
+            thiefMoves += 1;
             show();
         }
         else {
             for (int i = 0; i < policeNum; i++) {
                 polices[i].setLastX(polices[i].getX());
                 polices[i].setLastY(polices[i].getY());
-                polices[i].logicMove(theif.getX(), theif.getY());            }
+                polices[i].logicMove(theif.getX(), theif.getY());
+            }
             theif.move();
+            policeMoves += policeNum;
+            thiefMoves += 1;
             show();
         }
-        if(catchThief == false)
+        if(!catchThief)
             coordinates();
+        else {
+            System.out.println("THE THIEF WAS CATCHED");
+            System.out.println("policeMoves = " + policeMoves);
+            System.out.println("thiefMoves = " + thiefMoves);
+        }
     }
 
     public void show(){
@@ -117,8 +126,14 @@ public class Ground {
             System.out.println();
         }
         System.out.println();
+        try
+        {
+            Thread.sleep(2000);
+        }
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
         clearScreen();
-        if(catchThief == true)
-            System.out.println("THE THIEF WAS CATCHED");
     }
 }
